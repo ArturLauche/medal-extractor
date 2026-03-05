@@ -14,8 +14,8 @@ function App() {
     setResult(null)
 
     try {
-      // Replace with your deployed backend URL
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8787'
+      // Use relative path for Vercel deployment - works both locally and on Vercel
+      const API_URL = '/api'
       
       const response = await fetch(API_URL, {
         method: 'POST',

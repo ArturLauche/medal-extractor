@@ -1,7 +1,7 @@
 {
-  "name": "frontend",
+  "name": "medal-extractor",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -23,5 +23,8 @@
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
     "vite": "^7.3.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
