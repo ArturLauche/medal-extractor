@@ -1,6 +1,51 @@
+```
+# Dependencies
 node_modules/
-worker/
+
+# Environment variables
+.env
+.env.local
+.env.*
+
+# Build outputs
 dist/
-.cargo-ok
-package-lock.json
+build/
+coverage/
+htmlcov/
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+
+# IDE files
+.vscode/
+.idea/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# OS generated files
 .DS_Store
+Thumbs.db
+
+# Testing
+.mypy_cache/
+.pytest_cache/
+coverage.xml
+
+# Package managers
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Vercel
+.vercel/
+
+# Vite
+!.env.example
+```
