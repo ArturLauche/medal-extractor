@@ -2,7 +2,7 @@ import './globals.css';
 
 export const metadata = {
   title: 'Medal Extractor',
-  description: 'Extract direct MP4 URLs from Medal.tv clip links',
+  description: 'Get direct MP4 links from any Medal.tv clip. No account required.',
 };
 
 export default function RootLayout({ children }) {
