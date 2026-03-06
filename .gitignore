@@ -1,180 +1,71 @@
-# Next.js build outputs
-.next/
-out/
-
-# Dependencies
-node_modules/
-
-# Environment variables
-.env.local
-.env
-.env.*
-
-# Logs
-*.log
-
-# Temporary files
-*.tmp
-*.swp
-
-# IDE specific
-.vscode/
-.idea/
-
-# OS generated files
-.DS_Store
-Thumbs.db
-
-# Coverage reports
-coverage/
-.nyc_output/
-.jest/
-
-# Build artifacts
+```
+# Compiled and build artifacts
+*.pyc
+__pycache__/
+*.o
+*.obj
 dist/
 build/
 target/
 
-# Python related (if applicable)
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
+# Dependencies
 .venv/
-pip-log.txt
-pip-delete-this-directory.txt
-.tox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
+venv/
+node_modules/
+.julia/
+.zig-cache/
+
+# Logs and temp files
 *.log
-.git/
+*.tmp
+*.swp
+*.swo
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Coverage
+coverage/
+htmlcov/
+.coverage
+
+# Python specific
+*.pyc
+__pycache__/
 .mypy_cache/
 .pytest_cache/
-.hypothesis/
 
-# Go related (if applicable)
-*.out
-*.exe
-*.dll
-*.so
-*.dylib
-*.test
-*.prof
-vendor/
+# Node.js specific
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Java related (if applicable)
-*.class
-*.jar
-*.war
-*.ear
-*.tar.gz
-target/
+# Java/Gradle specific
 .gradle/
-!gradle.properties
 build/
+*.class
 
-# C/C++ related (if applicable)
-*.o
-*.a
-*.obj
-*.exe
-*.dll
-*.so
-*.dylib
-*.plist
-*.idb
-*.pdb
-*.sdf
-*.suo
-*.user
-*.userosscache
-*.sln.docstates
-*.vcxproj.filters
-*.vcproj.filters
-*.tlog
-*.ilk
-*.iobj
-*.ipdb
-*.il
-*.bundle
-*.cmake
-CMakeFiles/
-CMakeCache.txt
-cmake_install.manifest
-Makefile
-ninja*
-compile_commands.json
-generated.*
-*.gcno
-*.gcda
-*.gcov
-*.lcov
-*.stackdump
-*.gch
-*.ptvs
-*.VC.db
-*.VC.VC.opendb
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opendb-shm
-*.VC.VC.opendb-wal
-*.VC.VC.opend......
+# Compression files
+*.zip
+*.gz
+*.tar
+*.tgz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.zst
+```
