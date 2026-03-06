@@ -2,29 +2,11 @@
 
 import { useState } from 'react';
 
-function IconPlay() {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor">
-      <path d="M8 5v14l11-7z" />
-    </svg>
-  );
-}
-
-function IconGlobe() {
+function IconLink() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="10" />
-      <line x1="2" y1="12" x2="22" y2="12" />
-      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-    </svg>
-  );
-}
-
-function IconClipboard() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="9" y="9" width="13" height="13" rx="2" />
-      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+      <path d="M10 13a5 5 0 0 0 7.54.54l2.92-2.92a5 5 0 0 0-7.07-7.07l-1.67 1.67" />
+      <path d="M14 11a5 5 0 0 0-7.54-.54l-2.92 2.92a5 5 0 0 0 7.07 7.07l1.67-1.67" />
     </svg>
   );
 }
@@ -60,34 +42,8 @@ function IconExternal() {
 
 function IconCheck() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round">
       <polyline points="20 6 9 17 4 12" />
-    </svg>
-  );
-}
-
-function IconChevron() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="6 9 12 15 18 9" />
-    </svg>
-  );
-}
-
-function IconGitHub() {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-    </svg>
-  );
-}
-
-function IconAlert() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="10" />
-      <line x1="12" y1="8" x2="12" y2="12" />
-      <line x1="12" y1="16" x2="12.01" y2="16" />
     </svg>
   );
 }
@@ -98,7 +54,6 @@ export default function Home() {
   const [result, setResult] = useState('');
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
-  const [showInfo, setShowInfo] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -134,7 +89,7 @@ export default function Home() {
         setError('');
       }
     } catch {
-      setError('Clipboard access denied.');
+      setError('Clipboard access denied. Please paste manually.');
     }
   }
 
@@ -143,164 +98,132 @@ export default function Home() {
     try {
       await navigator.clipboard.writeText(result);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      setTimeout(() => setCopied(false), 1800);
     } catch {
-      setError('Could not copy.');
+      setError('Could not copy. Please select the URL and copy manually.');
     }
   }
 
   return (
-    <main className="app">
-      <div className="container">
-        <header className="app-header">
-          <div className="app-logo">
-            <IconPlay />
-          </div>
-          <div className="app-title">
-            <h1>Medal Extractor</h1>
-            <span>Video Link Extractor</span>
-          </div>
-        </header>
+    <main className="page">
+      <header className="header">
+        <h1>Medal Extractor</h1>
+        <p>
+          Extract direct MP4 links from Medal.tv clips. Supports all regions and URL formats.
+        </p>
+      </header>
 
-        {/* Input Section */}
-        <section className="section">
-          <div className="section-header">
-            <span className="section-indicator" />
-            <h2 className="section-title">Input</h2>
+      <div className="card card-main">
+        <form className="form" onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="clip-url" className="field-label">
+              Clip URL
+            </label>
+            <div className="input-group">
+              <span className="field-icon">
+                <IconLink />
+              </span>
+              <input
+                id="clip-url"
+                type="text"
+                value={url}
+                onChange={(e) => {
+                  setUrl(e.target.value);
+                  setError('');
+                }}
+                placeholder="https://medal.tv/games/.../clips/..."
+                className="url-field"
+                autoComplete="off"
+                spellCheck="false"
+              />
+              <span className="input-divider" />
+              <button type="button" onClick={handlePaste} className="paste-btn">
+                Paste
+              </button>
+            </div>
+            <p className="input-hint">
+              Supports regional URLs (<code>/de/</code>, <code>/en/</code>) and invite links
+            </p>
           </div>
-          <div className="section-body">
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label className="form-label">
-                  <IconGlobe />
-                  <span>Medal.tv URL</span>
-                </label>
-                <div className="input-row">
-                  <input
-                    type="text"
-                    value={url}
-                    onChange={(e) => {
-                      setUrl(e.target.value);
-                      setError('');
-                    }}
-                    placeholder="medal.tv/games/.../clips/..."
-                    className="text-input"
-                    autoComplete="off"
-                    spellCheck="false"
-                  />
-                  <button type="button" onClick={handlePaste} className="icon-btn" title="Paste from clipboard">
-                    <IconClipboard />
-                  </button>
-                </div>
-              </div>
-              <div className="form-group">
-                <button type="submit" disabled={loading || !url.trim()} className="primary-btn">
-                  {loading ? (
-                    <>
-                      <span className="spinner" />
-                      Extracting...
-                    </>
-                  ) : (
-                    <>
-                      <IconPlay />
-                      Extract
-                    </>
-                  )}
-                </button>
-              </div>
-            </form>
 
-            {error && (
-              <div className="status-message status-error" role="alert">
-                <IconAlert />
-                {error}
-              </div>
+          <button type="submit" disabled={loading || !url.trim()} className="submit-btn">
+            {loading ? (
+              <>
+                <span className="spinner" />
+                Extracting...
+              </>
+            ) : (
+              'Extract video'
             )}
+          </button>
+        </form>
+
+        {error && (
+          <div className="feedback feedback-error" role="alert">
+            {error}
           </div>
-        </section>
-
-        {/* Result Section */}
-        {result && (
-          <section className="section slide-in">
-            <div className="section-header">
-              <span className="section-indicator secondary" />
-              <h2 className="section-title">Result</h2>
-            </div>
-            <div className="section-body">
-              <div className="result-stats">
-                <div className="stat-box">
-                  <div className="stat-label">Status</div>
-                  <div className="stat-value success">Ready</div>
-                </div>
-                <div className="stat-box">
-                  <div className="stat-label">Format</div>
-                  <div className="stat-value">MP4</div>
-                </div>
-              </div>
-
-              <div className="video-wrapper">
-                <video src={result} controls />
-              </div>
-
-              <div className="data-row">
-                <span className="data-label">Direct URL</span>
-                <span className="data-value">{result}</span>
-                <div className="data-actions">
-                  <button type="button" onClick={handleCopy} className="small-btn">
-                    {copied ? <IconCheck /> : <IconCopy />}
-                    {copied ? 'Copied' : 'Copy'}
-                  </button>
-                </div>
-              </div>
-
-              <div className="action-bar">
-                <a href={result} target="_blank" rel="noreferrer" className="action-btn">
-                  <IconExternal />
-                  Open
-                </a>
-                <a href={result} download className="action-btn primary">
-                  <IconDownload />
-                  Download
-                </a>
-              </div>
-            </div>
-          </section>
         )}
 
-        {/* Info Section */}
-        <button
-          type="button"
-          className="info-toggle"
-          onClick={() => setShowInfo(!showInfo)}
-          aria-expanded={showInfo}
-        >
-          <IconChevron style={{ transform: showInfo ? 'rotate(180deg)' : 'none', marginLeft: 0, marginRight: '8px' }} />
-          Supported Formats
-        </button>
-        {showInfo && (
-          <div className="info-panel">
-            <ul className="info-list">
-              <li>medal.tv/games/[game]/clips/[id]</li>
-              <li>medal.tv/[locale]/games/[game]/clips/[id]</li>
-              <li>Invite links with ?invite= parameter</li>
-            </ul>
+        {result && (
+          <div className="result-panel">
+            <div className="result-header">
+              <h2>Video ready</h2>
+              <span className="status-badge">Direct URL</span>
+            </div>
+
+            <div className="player-container">
+              <video src={result} controls />
+            </div>
+
+            <div className="actions">
+              <button type="button" onClick={handleCopy} className="action-btn">
+                {copied ? <IconCheck /> : <IconCopy />}
+                {copied ? 'Copied' : 'Copy link'}
+              </button>
+              <a href={result} target="_blank" rel="noreferrer" className="action-btn">
+                <IconExternal />
+                Open in new tab
+              </a>
+              <a href={result} download className="action-btn action-btn-primary">
+                <IconDownload />
+                Download
+              </a>
+            </div>
+
+            <div className="url-output">
+              <label htmlFor="result-url">Direct video URL</label>
+              <input
+                id="result-url"
+                type="text"
+                readOnly
+                value={result}
+                onClick={(e) => e.target.select()}
+              />
+            </div>
           </div>
         )}
       </div>
 
-      <footer className="app-footer">
-        <div className="footer-content">
-          <p>Open Source</p>
+      <section className="info-section">
+        <h3>Supported formats</h3>
+        <ul className="info-list">
+          <li>Standard clips: medal.tv/games/[game]/clips/[id]</li>
+          <li>Regional URLs: medal.tv/[locale]/games/[game]/clips/[id]</li>
+          <li>Invite links with query parameters (?invite=, &amp;v=, &amp;tab=)</li>
+        </ul>
+      </section>
+
+      <footer className="footer">
+        <p>
+          Free and open source.{' '}
           <a
-            href="https://github.com/ArturLauche/medal-extractor"
+            href="https://github.com/ArturLauworksrg/medal-extractor"
             target="_blank"
             rel="noreferrer"
-            className="footer-link"
           >
-            <IconGitHub />
-            GitHub
+            View on GitHub
           </a>
-        </div>
+        </p>
       </footer>
     </main>
   );
