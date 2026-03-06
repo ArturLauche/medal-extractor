@@ -1,14 +1,8 @@
 ```
-# Dependencies
-node_modules/
-
 # Environment variables
+.env
 .env.local
-
-# Build outputs (if any generated files exist)
-dist/
-build/
-.next/
+*.env.*
 
 # Logs
 *.log
@@ -16,39 +10,46 @@ build/
 # Temporary files
 *.tmp
 *.swp
+*.swo
 
-# OS generated files
-.DS_Store
-Thumbs.db
+# Dependencies
+node_modules/
+.venv/
+venv/
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+.julia/
+zig*/
+julia-*/
+
+# Build artifacts
+dist/
+build/
+target/
 
 # IDE specific
 .vscode/
 .idea/
 
-# Python cache (if python files present)
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
+# OS generated
+.DS_Store
+Thumbs.db
 
-# Coverage reports
+# Coverage
 coverage/
 htmlcov/
 .coverage
 
-# Local configuration that might be generated
-.vercel/
-.cache/
-
 # Compressed files
 *.zip
-*.tar.gz
-*.tar
 *.gz
-*.rar
-*.7z
+*.tar
+*.tgz
 *.bz2
 *.xz
+*.7z
+*.rar
 *.zst
 *.lz4
 *.lzh
@@ -59,4 +60,8 @@ htmlcov/
 *.Z
 *.lz
 *.lzo
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tar.zst
 ```
