@@ -107,7 +107,7 @@ export default function Home() {
       setCopied(true);
       setTimeout(() => setCopied(false), 1800);
     } catch {
-      setError('Could not copy — select the URL below and copy it manually.');
+      setError('Could not copy \u2014 select the URL below and copy it manually.');
     }
   }
 
@@ -116,7 +116,7 @@ export default function Home() {
       <header className="hero">
         <span className="eyebrow">
           <span className="status-dot" />
-          Medal.tv · Direct link extractor
+          Medal.tv \u00b7 Direct link extractor
         </span>
 
         <div className="hero-grid">
@@ -127,21 +127,21 @@ export default function Home() {
               to any clip.
             </h1>
             <p className="lead">
-              Paste a Medal.tv clip URL to get a clean CDN-direct MP4 — up to 1080p.
-              Fast, simple, and a little more delightful than it needs to be.
+              Paste a Medal.tv clip URL to get a clean CDN-direct MP4 \u2014 up to 1080p.
+              Works with localized links, invite URLs, and any region.
             </p>
           </div>
 
           <div className="hero-notes">
             <div className="note-card">
-              <p className="note-kicker">Feels nice</p>
-              <p className="note-value">Fast flow</p>
-              <p className="note-copy">Paste, extract, copy, done.</p>
+              <p className="note-kicker">All regions</p>
+              <p className="note-value">Locale support</p>
+              <p className="note-copy">Works with /de/, /en/, /fr/ and all regional URLs.</p>
             </div>
             <div className="note-card">
-              <p className="note-kicker">Personal touch</p>
-              <p className="note-value">Soft sparkle</p>
-              <p className="note-copy">A cleaner UI with subtle personality.</p>
+              <p className="note-kicker">Invite links</p>
+              <p className="note-value">Full URL</p>
+              <p className="note-copy">?invite=, &amp;v=, &amp;tab= query params all handled.</p>
             </div>
           </div>
         </div>
@@ -152,20 +152,20 @@ export default function Home() {
           <form className="form" onSubmit={handleSubmit}>
             <div className="field-top">
               <label htmlFor="clip-url" className="field-label">Clip URL</label>
-              <span className="field-meta">Ready for public Medal links</span>
+              <span className="field-meta">Supports regional &amp; invite links</span>
             </div>
 
             <div className="input-shell">
               <span className="field-icon"><IconLink /></span>
               <input
                 id="clip-url"
-                type="url"
+                type="text"
                 value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                placeholder="https://medal.tv/games/.../clips/..."
+                onChange={(e) => { setUrl(e.target.value); setError(''); }}
+                placeholder="https://medal.tv/de/games/.../clips/..."
                 className="url-field"
-                required
                 autoComplete="off"
+                spellCheck="false"
               />
               <span className="shell-divider" />
               <button type="button" onClick={handlePaste} className="paste-btn">
@@ -174,19 +174,19 @@ export default function Home() {
             </div>
 
             <div className="input-help">
-              <span>Supports the standard clip pattern</span>
-              <span className="code-pill">medal.tv/games/[game]/clips/[clip-id]</span>
+              <span>Locale &amp; invite URLs supported</span>
+              <span className="code-pill">medal.tv/[locale]/games/[game]/clips/[id]</span>
             </div>
 
-            <button type="submit" disabled={loading} className="submit-btn">
-              {loading ? <><span className="spinner" />Extracting…</> : 'Extract video'}
+            <button type="submit" disabled={loading || !url.trim()} className="submit-btn">
+              {loading ? <><span className="spinner" />Extracting\u2026</> : 'Extract video'}
             </button>
 
             <div className="trust-row">
               <span>Free</span>
-              <span className="trust-sep">·</span>
+              <span className="trust-sep">\u00b7</span>
               <span>Up to 1080p</span>
-              <span className="trust-sep">·</span>
+              <span className="trust-sep">\u00b7</span>
               <span>No account required</span>
             </div>
           </form>
@@ -239,7 +239,7 @@ export default function Home() {
         <aside className="card card-aside">
           <p className="section-label">Supported format</p>
           <h2>URL structure</h2>
-          <pre className="code-block">{`medal.tv/games/[game]\n  /clips/[clip-id]`}</pre>
+          <pre className="code-block">{`medal.tv/games/[game]\n  /clips/[clip-id]\n\nmedal.tv/[locale]/games\n  /[game]/clips/[id]`}</pre>
 
           <div className="aside-divider" />
 
@@ -254,7 +254,9 @@ export default function Home() {
           </ol>
 
           <div className="aside-note">
-            If a clip returns “not found”, verify it is still public on Medal before trying again.
+            Query params like <code>?invite=</code>, <code>&amp;v=</code> and{' '}
+            <code>&amp;tab=</code> are stripped automatically. If a clip returns
+            \u201cnot found\u201d, verify it is still public on Medal.
           </div>
         </aside>
       </div>

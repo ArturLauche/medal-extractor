@@ -173,7 +173,7 @@ input {
 }
 
 .sparkle-word::after {
-  content: '✦';
+  content: '\2736';
   position: absolute;
   top: -0.32em;
   right: -0.42em;
@@ -690,6 +690,16 @@ input {
   font-size: 0.83rem;
   color: var(--text-secondary);
   line-height: 1.65;
+}
+
+.aside-note code {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.82em;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(24, 24, 27, 0.08);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  color: var(--text-secondary);
 }
 
 .spinner {
