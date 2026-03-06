@@ -1,16 +1,47 @@
-# React + Vite
+# Medal Extractor
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Next.js web app that extracts direct MP4 video URLs from [Medal.tv](https://medal.tv) clip links.
 
-Currently, two official plugins are available:
+## How It Works
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Paste a Medal.tv clip URL into the form, hit **Extract**, and you get a direct video link you can watch inline, copy, or download.
 
-## React Compiler
+Internally the API:
+1. Validates the URL matches `medal.tv/games/.../clips/...`
+2. Fetches Medal’s `_next/data` endpoint to read clip metadata
+3. Auto-detects the current build hash from `medal.tv` if the path is stale
+4. Returns the highest available quality (1080p → 720p → … → 144p fallback)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## API
 
-## Expanding the ESLint configuration
+```
+POST /api/extract
+Content-Type: application/json
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+{ "url": "https://medal.tv/games/valorant/clips/abc123" }
+```
+
+**Success:**
+```json
+{ "success": true, "url": "https://cdn.medal.tv/..." }
+```
+
+**Error:**
+```json
+{ "success": false, "error": "Invalid Medal.tv clip URL" }
+```
+
+## Running Locally
+
+```bash
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+## Deployment
+
+Deploy to [Vercel](https://vercel.com) — no environment variables required.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/ArturLauche/medal-extractor)
