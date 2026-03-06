@@ -1,18 +1,20 @@
 {
-    "name": "medal",
-    "version": "1.0.0",
-    "description": "Worker for extracting direct video links from Medal.tv",
-    "main": "src/index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "format": "prettier --write '**/*.{js,css,json,md}'"
-    },
-    "author": "Astrid",
-    "devDependencies": {
-        "prettier": "^1.17.0"
-    },
-    "dependencies": {
-        "@tsndr/cloudflare-worker-router": "^1.1.1",
-        "serverless-cloudflare-workers": "^1.2.0"
-    }
+  "name": "medal-extractor",
+  "private": true,
+  "version": "1.0.0",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "^15.2.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }
