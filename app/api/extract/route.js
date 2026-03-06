@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 
+export const runtime = 'edge';
+
 const URL_REGEX = /^(https?:\/\/)?medal\.tv\/games\/.*\/clips?(\/[\w\d-_]+){1,2}$/;
 const QUALITIES = [1080, 720, 480, 360, 240, 144];
 
@@ -64,7 +66,6 @@ export async function POST(request) {
       if (data?.notFound) {
         return NextResponse.json({ success: false, error: 'Clip not found' }, { status: 404 });
       }
-      // Build path was stale — refresh and retry once
       if (attempt === 0) {
         try {
           buildPath = await getBuildPath();
