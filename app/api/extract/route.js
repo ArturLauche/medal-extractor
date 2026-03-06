@@ -2,24 +2,50 @@ import { NextResponse } from 'next/server';
 
 export const runtime = 'edge';
 
-const URL_REGEX = /^(https?:\/\/)?medal\.tv\/games\/.*\/clips?(\/[\w\d-_]+){1,2}$/;
-const QUALITIES = [1080, 720, 480, 360, 240, 144];
+// Matches medal.tv/games/.../clips/ID and locale variants like
+// medal.tv/de/games/.../clips/ID — with or without query params.
+const URL_REGEX =
+  /^(https?:\/\/)?medal\.tv(\/[a-z]{2})?\/games\/[^/?#]+\/clips\/[\w\d-_]+/i;
 
-function getHighestQuality(clipData) {
-  for (const q of QUALITIES) {
-    if (clipData[`contentUrl${q}p`]) return clipData[`contentUrl${q}p`];
-  }
-  return clipData.socialMediaVideo ?? null;
+function extractClipId(url) {
+  // Stops at the first ? or & so query params are ignored
+  const match = url.match(/\/clips\/([^/?&]+)/);
+  return match ? match[1] : null;
 }
 
-async function getBuildPath() {
-  const res = await fetch('https://medal.tv', {
-    headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
+async function getVideoUrl(clipId) {
+  const pageUrl = `https://medal.tv/clips/${clipId}`;
+  const res = await fetch(pageUrl, {
+    headers: {
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+      Accept: 'text/html,application/xhtml+xml',
+    },
   });
+
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`Medal returned ${res.status}`);
+
   const html = await res.text();
-  const match = html.match(/\/_next\/static\/(\w+)\/_ssgManifest/);
-  if (!match) throw new Error('Could not determine Medal build path');
-  return match[1];
+
+  // Primary: contentUrl embedded in Next.js hydration JSON
+  const contentUrlMatch = html.split('"contentUrl":"')[1]?.split('"')[0];
+  if (contentUrlMatch && contentUrlMatch.startsWith('http'))
+    return contentUrlMatch;
+
+  // Fallback 1: og:video:url meta tag
+  const ogVideoMatch = html
+    .split('property="og:video:url" content="')[1]
+    ?.split('"')[0];
+  if (ogVideoMatch && ogVideoMatch.startsWith('http')) return ogVideoMatch;
+
+  // Fallback 2: og:video:secure_url meta tag
+  const ogSecureMatch = html
+    .split('property="og:video:secure_url" content="')[1]
+    ?.split('"')[0];
+  if (ogSecureMatch && ogSecureMatch.startsWith('http')) return ogSecureMatch;
+
+  return null;
 }
 
 export async function POST(request) {
@@ -27,85 +53,60 @@ export async function POST(request) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ success: false, error: 'Invalid JSON body' }, { status: 400 });
+    return NextResponse.json(
+      { success: false, error: 'Invalid JSON body' },
+      { status: 400 }
+    );
   }
 
   if (!body?.url) {
-    return NextResponse.json({ success: false, error: 'No URL provided' }, { status: 400 });
+    return NextResponse.json(
+      { success: false, error: 'No URL provided' },
+      { status: 400 }
+    );
   }
 
-  if (!URL_REGEX.test(body.url)) {
-    return NextResponse.json({ success: false, error: 'Invalid Medal.tv clip URL' }, { status: 400 });
+  const trimmed = body.url.trim();
+
+  if (!URL_REGEX.test(trimmed)) {
+    return NextResponse.json(
+      {
+        success: false,
+        error:
+          'Invalid Medal.tv URL. Expected: medal.tv/games/[game]/clips/[id] or medal.tv/[locale]/games/[game]/clips/[id]',
+      },
+      { status: 400 }
+    );
   }
 
-  let buildPath;
+  const clipId = extractClipId(trimmed);
+  if (!clipId) {
+    return NextResponse.json(
+      { success: false, error: 'Could not extract clip ID from URL' },
+      { status: 400 }
+    );
+  }
+
+  let videoUrl;
   try {
-    buildPath = await getBuildPath();
-  } catch {
-    return NextResponse.json({ success: false, error: 'Failed to contact Medal.tv' }, { status: 502 });
+    videoUrl = await getVideoUrl(clipId);
+  } catch (err) {
+    return NextResponse.json(
+      { success: false, error: `Failed to reach Medal.tv: ${err.message}` },
+      { status: 502 }
+    );
   }
 
-  for (let attempt = 0; attempt < 2; attempt++) {
-    const apiUrl =
-      body.url
-        .replace('medal.tv', `medal.tv/_next/data/${buildPath}/en`)
-        .replace('/clip/', '/clips/')
-        .replace(/(\?.*)/, '') + '.json';
-
-    let res;
-    try {
-      res = await fetch(apiUrl, {
-        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
-      });
-    } catch {
-      return NextResponse.json({ success: false, error: 'Network error contacting Medal' }, { status: 502 });
-    }
-
-    if (res.status === 404) {
-      const data = await res.json().catch(() => null);
-      if (data?.notFound) {
-        return NextResponse.json({ success: false, error: 'Clip not found' }, { status: 404 });
-      }
-      if (attempt === 0) {
-        try {
-          buildPath = await getBuildPath();
-        } catch {
-          break;
-        }
-        continue;
-      }
-      break;
-    }
-
-    if (!res.ok) {
-      return NextResponse.json(
-        { success: false, error: `Unexpected Medal API response: ${res.status}` },
-        { status: 502 }
-      );
-    }
-
-    let data;
-    try {
-      data = await res.json();
-    } catch {
-      return NextResponse.json({ success: false, error: 'Malformed response from Medal' }, { status: 502 });
-    }
-
-    const clipData = data?.pageProps?.clip;
-    if (!clipData) {
-      return NextResponse.json({ success: false, error: 'No clip data in Medal response' }, { status: 502 });
-    }
-
-    const videoUrl = getHighestQuality(clipData);
-    if (!videoUrl) {
-      return NextResponse.json({ success: false, error: 'No video URL found in clip data' }, { status: 502 });
-    }
-
-    return NextResponse.json({ success: true, url: videoUrl });
+  if (!videoUrl) {
+    return NextResponse.json(
+      {
+        success: false,
+        error:
+          'Clip not found or video unavailable. Make sure the clip is still public.',
+      },
+      { status: 404 }
+    );
   }
 
-  return NextResponse.json(
-    { success: false, error: 'Medal may have changed their API — please open an issue' },
-    { status: 502 }
-  );
+  return NextResponse.json({ success: true, url: videoUrl });
 }
