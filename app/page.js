@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 
-/* ─── Icons ─────────────────────────────────────── */
-
 function IconLink() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
@@ -50,16 +48,12 @@ function IconCheck() {
   );
 }
 
-/* ─── Data ─────────────────────────────────────── */
-
 const STEPS = [
   'Copy a clip link from Medal.tv',
-  'Paste it into the field above',
-  <span key="s3">Click <strong>Extract video</strong></span>,
+  'Paste it into the input above',
+  <span key="step-3">Click <strong>Extract video</strong></span>,
   'Preview, copy, or download',
 ];
-
-/* ─── Page ─────────────────────────────────────── */
 
 export default function Home() {
   const [url, setUrl] = useState('');
@@ -72,10 +66,12 @@ export default function Home() {
     e.preventDefault();
     const trimmed = url.trim();
     if (!trimmed) return;
+
     setLoading(true);
     setResult('');
     setError('');
     setCopied(false);
+
     try {
       const res = await fetch('/api/extract', {
         method: 'POST',
@@ -95,7 +91,10 @@ export default function Home() {
   async function handlePaste() {
     try {
       const text = await navigator.clipboard.readText();
-      if (text) { setUrl(text.trim()); setError(''); }
+      if (text) {
+        setUrl(text.trim());
+        setError('');
+      }
     } catch {
       setError('Clipboard access was denied. Paste the URL manually.');
     }
@@ -114,28 +113,47 @@ export default function Home() {
 
   return (
     <div className="page">
-
-      {/* Hero */}
       <header className="hero">
         <span className="eyebrow">
           <span className="status-dot" />
           Medal.tv · Direct link extractor
         </span>
-        <h1>Get the direct link<br />to any clip.</h1>
-        <p className="lead">
-          Paste a Medal.tv clip URL to get a CDN-direct MP4 — up to 1080p.
-          No account, no extension, no fuss.
-        </p>
+
+        <div className="hero-grid">
+          <div className="hero-copy">
+            <h1>
+              Get the <span className="sparkle-word">direct link</span>
+              <br />
+              to any clip.
+            </h1>
+            <p className="lead">
+              Paste a Medal.tv clip URL to get a clean CDN-direct MP4 — up to 1080p.
+              Fast, simple, and a little more delightful than it needs to be.
+            </p>
+          </div>
+
+          <div className="hero-notes">
+            <div className="note-card">
+              <p className="note-kicker">Feels nice</p>
+              <p className="note-value">Fast flow</p>
+              <p className="note-copy">Paste, extract, copy, done.</p>
+            </div>
+            <div className="note-card">
+              <p className="note-kicker">Personal touch</p>
+              <p className="note-value">Soft sparkle</p>
+              <p className="note-copy">A cleaner UI with subtle personality.</p>
+            </div>
+          </div>
+        </div>
       </header>
 
-      {/* Workspace */}
       <div className="workspace">
-
-        {/* Main card */}
         <div className="card card-main">
           <form className="form" onSubmit={handleSubmit}>
-
-            <label htmlFor="clip-url" className="field-label">Clip URL</label>
+            <div className="field-top">
+              <label htmlFor="clip-url" className="field-label">Clip URL</label>
+              <span className="field-meta">Ready for public Medal links</span>
+            </div>
 
             <div className="input-shell">
               <span className="field-icon"><IconLink /></span>
@@ -155,22 +173,22 @@ export default function Home() {
               </button>
             </div>
 
-            <p className="input-help">medal.tv/games/[game]/clips/[clip-id]</p>
+            <div className="input-help">
+              <span>Supports the standard clip pattern</span>
+              <span className="code-pill">medal.tv/games/[game]/clips/[clip-id]</span>
+            </div>
 
             <button type="submit" disabled={loading} className="submit-btn">
-              {loading
-                ? <><span className="spinner" />Extracting&hellip;</>
-                : 'Extract video'}
+              {loading ? <><span className="spinner" />Extracting…</> : 'Extract video'}
             </button>
 
-            <p className="trust-row">
+            <div className="trust-row">
               <span>Free</span>
               <span className="trust-sep">·</span>
               <span>Up to 1080p</span>
               <span className="trust-sep">·</span>
               <span>No account required</span>
-            </p>
-
+            </div>
           </form>
 
           {error && (
@@ -218,7 +236,6 @@ export default function Home() {
           )}
         </div>
 
-        {/* Sidebar */}
         <aside className="card card-aside">
           <p className="section-label">Supported format</p>
           <h2>URL structure</h2>
@@ -237,11 +254,9 @@ export default function Home() {
           </ol>
 
           <div className="aside-note">
-            If a clip returns “not found”, verify it’s still public
-            on Medal before trying again.
+            If a clip returns “not found”, verify it is still public on Medal before trying again.
           </div>
         </aside>
-
       </div>
     </div>
   );
