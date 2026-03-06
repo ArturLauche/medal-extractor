@@ -48,13 +48,6 @@ function IconCheck() {
   );
 }
 
-const STEPS = [
-  'Copy a clip link from Medal.tv',
-  'Paste it into the input above',
-  <span key="step-3">Click <strong>Extract video</strong></span>,
-  'Preview, copy, or download',
-];
-
 export default function Home() {
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
@@ -96,7 +89,7 @@ export default function Home() {
         setError('');
       }
     } catch {
-      setError('Clipboard access was denied. Paste the URL manually.');
+      setError('Clipboard access denied. Please paste manually.');
     }
   }
 
@@ -107,159 +100,131 @@ export default function Home() {
       setCopied(true);
       setTimeout(() => setCopied(false), 1800);
     } catch {
-      setError('Could not copy \u2014 select the URL below and copy it manually.');
+      setError('Could not copy. Please select the URL and copy manually.');
     }
   }
 
   return (
-    <div className="page">
-      <header className="hero">
-        <span className="eyebrow">
-          <span className="status-dot" />
-          Medal.tv \u00b7 Direct link extractor
-        </span>
-
-        <div className="hero-grid">
-          <div className="hero-copy">
-            <h1>
-              Get the <span className="sparkle-word">direct link</span>
-              <br />
-              to any clip.
-            </h1>
-            <p className="lead">
-              Paste a Medal.tv clip URL to get a clean CDN-direct MP4 \u2014 up to 1080p.
-              Works with localized links, invite URLs, and any region.
-            </p>
-          </div>
-
-          <div className="hero-notes">
-            <div className="note-card">
-              <p className="note-kicker">All regions</p>
-              <p className="note-value">Locale support</p>
-              <p className="note-copy">Works with /de/, /en/, /fr/ and all regional URLs.</p>
-            </div>
-            <div className="note-card">
-              <p className="note-kicker">Invite links</p>
-              <p className="note-value">Full URL</p>
-              <p className="note-copy">?invite=, &amp;v=, &amp;tab= query params all handled.</p>
-            </div>
-          </div>
-        </div>
+    <main className="page">
+      <header className="header">
+        <h1>Medal Extractor</h1>
+        <p>
+          Extract direct MP4 links from Medal.tv clips. Supports all regions and URL formats.
+        </p>
       </header>
 
-      <div className="workspace">
-        <div className="card card-main">
-          <form className="form" onSubmit={handleSubmit}>
-            <div className="field-top">
-              <label htmlFor="clip-url" className="field-label">Clip URL</label>
-              <span className="field-meta">Supports regional &amp; invite links</span>
-            </div>
-
-            <div className="input-shell">
-              <span className="field-icon"><IconLink /></span>
+      <div className="card card-main">
+        <form className="form" onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="clip-url" className="field-label">
+              Clip URL
+            </label>
+            <div className="input-group">
+              <span className="field-icon">
+                <IconLink />
+              </span>
               <input
                 id="clip-url"
                 type="text"
                 value={url}
-                onChange={(e) => { setUrl(e.target.value); setError(''); }}
-                placeholder="https://medal.tv/de/games/.../clips/..."
+                onChange={(e) => {
+                  setUrl(e.target.value);
+                  setError('');
+                }}
+                placeholder="https://medal.tv/games/.../clips/..."
                 className="url-field"
                 autoComplete="off"
                 spellCheck="false"
               />
-              <span className="shell-divider" />
+              <span className="input-divider" />
               <button type="button" onClick={handlePaste} className="paste-btn">
                 Paste
               </button>
             </div>
-
-            <div className="input-help">
-              <span>Locale &amp; invite URLs supported</span>
-              <span className="code-pill">medal.tv/[locale]/games/[game]/clips/[id]</span>
-            </div>
-
-            <button type="submit" disabled={loading || !url.trim()} className="submit-btn">
-              {loading ? <><span className="spinner" />Extracting\u2026</> : 'Extract video'}
-            </button>
-
-            <div className="trust-row">
-              <span>Free</span>
-              <span className="trust-sep">\u00b7</span>
-              <span>Up to 1080p</span>
-              <span className="trust-sep">\u00b7</span>
-              <span>No account required</span>
-            </div>
-          </form>
-
-          {error && (
-            <div className="feedback feedback-error" role="alert">{error}</div>
-          )}
-
-          {result && (
-            <div className="result-panel">
-              <div className="result-top">
-                <div>
-                  <p className="section-label">Preview</p>
-                  <h2>Ready to use</h2>
-                </div>
-                <span className="status-pill">Direct URL</span>
-              </div>
-
-              <div className="player-wrap">
-                <video src={result} controls />
-              </div>
-
-              <div className="result-toolbar">
-                <button type="button" onClick={handleCopy} className="action-btn">
-                  {copied ? <IconCheck /> : <IconCopy />}
-                  {copied ? 'Copied' : 'Copy link'}
-                </button>
-                <a href={result} target="_blank" rel="noreferrer" className="action-btn">
-                  <IconExternal /> Open file
-                </a>
-                <a href={result} download className="action-btn action-btn-solid">
-                  <IconDownload /> Download
-                </a>
-              </div>
-
-              <div className="url-output">
-                <label htmlFor="result-url">Direct video URL</label>
-                <input
-                  id="result-url"
-                  type="text"
-                  readOnly
-                  value={result}
-                  onClick={(e) => e.target.select()}
-                />
-              </div>
-            </div>
-          )}
-        </div>
-
-        <aside className="card card-aside">
-          <p className="section-label">Supported format</p>
-          <h2>URL structure</h2>
-          <pre className="code-block">{`medal.tv/games/[game]\n  /clips/[clip-id]\n\nmedal.tv/[locale]/games\n  /[game]/clips/[id]`}</pre>
-
-          <div className="aside-divider" />
-
-          <p className="section-label">How it works</p>
-          <ol className="steps-list">
-            {STEPS.map((step, i) => (
-              <li key={i} className="step-item">
-                <span className="step-num">{i + 1}</span>
-                <span>{step}</span>
-              </li>
-            ))}
-          </ol>
-
-          <div className="aside-note">
-            Query params like <code>?invite=</code>, <code>&amp;v=</code> and{' '}
-            <code>&amp;tab=</code> are stripped automatically. If a clip returns
-            \u201cnot found\u201d, verify it is still public on Medal.
+            <p className="input-hint">
+              Supports regional URLs (<code>/de/</code>, <code>/en/</code>) and invite links
+            </p>
           </div>
-        </aside>
+
+          <button type="submit" disabled={loading || !url.trim()} className="submit-btn">
+            {loading ? (
+              <>
+                <span className="spinner" />
+                Extracting...
+              </>
+            ) : (
+              'Extract video'
+            )}
+          </button>
+        </form>
+
+        {error && (
+          <div className="feedback feedback-error" role="alert">
+            {error}
+          </div>
+        )}
+
+        {result && (
+          <div className="result-panel">
+            <div className="result-header">
+              <h2>Video ready</h2>
+              <span className="status-badge">Direct URL</span>
+            </div>
+
+            <div className="player-container">
+              <video src={result} controls />
+            </div>
+
+            <div className="actions">
+              <button type="button" onClick={handleCopy} className="action-btn">
+                {copied ? <IconCheck /> : <IconCopy />}
+                {copied ? 'Copied' : 'Copy link'}
+              </button>
+              <a href={result} target="_blank" rel="noreferrer" className="action-btn">
+                <IconExternal />
+                Open in new tab
+              </a>
+              <a href={result} download className="action-btn action-btn-primary">
+                <IconDownload />
+                Download
+              </a>
+            </div>
+
+            <div className="url-output">
+              <label htmlFor="result-url">Direct video URL</label>
+              <input
+                id="result-url"
+                type="text"
+                readOnly
+                value={result}
+                onClick={(e) => e.target.select()}
+              />
+            </div>
+          </div>
+        )}
       </div>
-    </div>
+
+      <section className="info-section">
+        <h3>Supported formats</h3>
+        <ul className="info-list">
+          <li>Standard clips: medal.tv/games/[game]/clips/[id]</li>
+          <li>Regional URLs: medal.tv/[locale]/games/[game]/clips/[id]</li>
+          <li>Invite links with query parameters (?invite=, &amp;v=, &amp;tab=)</li>
+        </ul>
+      </section>
+
+      <footer className="footer">
+        <p>
+          Free and open source.{' '}
+          <a
+            href="https://github.com/ArturLauworksrg/medal-extractor"
+            target="_blank"
+            rel="noreferrer"
+          >
+            View on GitHub
+          </a>
+        </p>
+      </footer>
+    </main>
   );
 }
