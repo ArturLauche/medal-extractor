@@ -9,6 +9,7 @@
   --radius: 10px;
   --radius-lg: 14px;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  --shadow-raised: 0 4px 20px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 *,
@@ -23,7 +24,10 @@ html {
 
 body {
   margin: 0;
-  background: var(--page-bg);
+  background-color: var(--page-bg);
+  /* Subtle dot grid — the only 'fancy' background detail */
+  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+  background-size: 22px 22px;
   color: var(--text);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -41,34 +45,67 @@ input {
   font: inherit;
 }
 
-/* ─── Page shell ──────────────────────────────── */
+/* ─── Page ────────────────────────────────────── */
 
 .page {
   width: min(1080px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 80px 0 72px;
+  padding: 72px 0 64px;
 }
 
 /* ─── Hero ────────────────────────────────────── */
 
 .hero {
-  max-width: 700px;
-  margin-bottom: 36px;
+  max-width: 660px;
+  margin-bottom: 28px;
 }
 
 .eyebrow {
-  display: block;
-  font-size: 0.77rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text-muted);
-  margin: 0 0 14px;
+  margin: 0 0 16px;
+}
+
+/* Pulsing green dot — signals the service is live */
+.status-dot {
+  position: relative;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+  flex-shrink: 0;
+}
+
+.status-dot::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: rgba(34, 197, 94, 0.35);
+  animation: dot-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes dot-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0;
+    transform: scale(2.2);
+  }
 }
 
 .hero h1 {
   margin: 0;
-  font-size: clamp(2.6rem, 5.5vw, 4.2rem);
+  font-size: clamp(2.4rem, 5.5vw, 3.9rem);
   font-weight: 800;
   letter-spacing: -0.05em;
   line-height: 0.97;
@@ -76,14 +113,14 @@ input {
 }
 
 .hero .lead {
-  margin: 18px 0 0;
+  margin: 15px 0 0;
   font-size: 1rem;
   color: var(--text-secondary);
   line-height: 1.7;
-  max-width: 580px;
+  max-width: 560px;
 }
 
-/* ─── Workspace grid ──────────────────────────── */
+/* ─── Workspace ──────────────────────────────── */
 
 .workspace {
   display: grid;
@@ -103,6 +140,9 @@ input {
 
 .card-main {
   padding: 26px;
+  /* Dark top accent — the signature professional touch */
+  border-top: 2px solid #09090b;
+  box-shadow: var(--shadow-raised);
 }
 
 .card-aside {
@@ -114,46 +154,30 @@ input {
 .form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
-.field-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.field-header label {
+.field-label {
+  display: block;
   font-size: 0.88rem;
   font-weight: 600;
   color: var(--text);
 }
 
-.field-hint {
-  font-size: 0.79rem;
-  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-  color: var(--text-muted);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* Input shell — the entire input + paste row */
+/* Unified input shell */
 .input-shell {
   display: flex;
   align-items: center;
-  gap: 0;
-  height: 46px;
+  height: 48px;
   border: 1px solid var(--border-input);
   border-radius: var(--radius);
   background: var(--surface);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
   overflow: hidden;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .input-shell:focus-within {
-  border-color: #a1a1aa;
+  border-color: #71717a;
   box-shadow: 0 0 0 3px rgba(9, 9, 11, 0.06);
 }
 
@@ -162,7 +186,7 @@ input {
   width: 16px;
   height: 16px;
   margin: 0 10px 0 14px;
-  color: #c0c0c8;
+  color: #c4c4cc;
   pointer-events: none;
 }
 
@@ -183,7 +207,7 @@ input {
 }
 
 .url-field::placeholder {
-  color: #c0c0c8;
+  color: #c4c4cc;
 }
 
 .shell-divider {
@@ -196,12 +220,12 @@ input {
 .paste-btn {
   flex-shrink: 0;
   height: 100%;
-  padding: 0 14px;
+  padding: 0 15px;
   border: 0;
   background: transparent;
   color: var(--text-secondary);
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 0.84rem;
   font-weight: 500;
   transition: background 0.12s ease, color 0.12s ease;
 }
@@ -211,13 +235,22 @@ input {
   color: var(--text);
 }
 
+/* Small monospace hint below input */
+.input-help {
+  margin: -2px 0 0;
+  font-size: 0.78rem;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  color: var(--text-muted);
+}
+
 /* Primary CTA */
 .submit-btn {
   width: 100%;
-  height: 46px;
+  height: 48px;
+  margin-top: 2px;
   border: 0;
   border-radius: var(--radius);
-  /* Slight gradient — the only gradient in the design */
+  /* The only gradient: near-black with just enough depth */
   background: linear-gradient(180deg, #2c2c30 0%, #18181b 100%);
   color: #fafafa;
   font-size: 0.95rem;
@@ -228,18 +261,19 @@ input {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  transition: opacity 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition: opacity 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
 }
 
 .submit-btn:hover:not(:disabled) {
   opacity: 0.87;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.24);
 }
 
 .submit-btn:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   opacity: 1;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
 }
 
 .submit-btn:disabled {
@@ -247,7 +281,22 @@ input {
   cursor: not-allowed;
 }
 
-/* ─── Feedback banners ────────────────────────── */
+/* Trust signals row */
+.trust-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  padding-top: 2px;
+}
+
+.trust-sep {
+  color: var(--border-input);
+}
+
+/* ─── Feedback ───────────────────────────────── */
 
 .feedback {
   margin-top: 16px;
@@ -263,12 +312,24 @@ input {
   color: #b91c1c;
 }
 
-/* ─── Result panel ────────────────────────────── */
+/* ─── Result panel ───────────────────────────── */
 
 .result-panel {
   margin-top: 22px;
   padding-top: 22px;
   border-top: 1px solid var(--border);
+  animation: slide-up 0.3s ease both;
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .result-top {
@@ -285,13 +346,13 @@ input {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text-muted);
-  margin: 0 0 4px;
+  margin: 0 0 3px;
 }
 
 .result-top h2,
 .card-aside h2 {
   margin: 0;
-  font-size: 1.15rem;
+  font-size: 1.12rem;
   font-weight: 700;
   letter-spacing: -0.025em;
   color: var(--text);
@@ -306,7 +367,7 @@ input {
   background: #f0fdf4;
   border: 1px solid #bbf7d0;
   color: #16a34a;
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   font-weight: 600;
   white-space: nowrap;
   flex-shrink: 0;
@@ -344,7 +405,7 @@ input {
   background: var(--surface);
   color: var(--text-secondary);
   cursor: pointer;
-  font-size: 0.87rem;
+  font-size: 0.86rem;
   font-weight: 500;
   text-decoration: none;
   transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
@@ -380,7 +441,7 @@ input {
 
 .url-output label {
   display: block;
-  font-size: 0.81rem;
+  font-size: 0.8rem;
   color: var(--text-muted);
   margin-bottom: 6px;
 }
@@ -395,14 +456,14 @@ input {
   color: var(--text-secondary);
   outline: none;
   cursor: text;
-  font-size: 0.85rem;
+  font-size: 0.84rem;
 }
 
 /* ─── Sidebar ─────────────────────────────────── */
 
 .card-aside h2 {
-  font-size: 1rem;
-  margin-bottom: 12px;
+  font-size: 1.02rem;
+  margin: 4px 0 10px;
 }
 
 .code-block {
@@ -415,7 +476,7 @@ input {
   font-size: 0.78rem;
   color: var(--text-secondary);
   word-break: break-all;
-  line-height: 1.6;
+  line-height: 1.65;
   margin: 0;
 }
 
@@ -425,27 +486,50 @@ input {
   margin: 18px 0;
 }
 
+/* Custom numbered steps */
 .steps-list {
-  margin: 12px 0 0;
-  padding-left: 17px;
-  color: var(--text-secondary);
-  font-size: 0.88rem;
-  line-height: 1.75;
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.steps-list li + li {
-  margin-top: 2px;
+.step-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 21px;
+  height: 21px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid var(--border-input);
+  background: var(--surface);
+  font-size: 0.71rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-top: 1px;
 }
 
 .aside-note {
-  margin-top: 18px;
-  padding: 12px 13px;
+  margin-top: 16px;
+  padding: 11px 13px;
   border-radius: var(--radius);
   background: #fafafa;
   border: 1px solid var(--border);
-  font-size: 0.84rem;
+  font-size: 0.83rem;
   color: var(--text-secondary);
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
 /* ─── Spinner ─────────────────────────────────── */
@@ -472,7 +556,6 @@ input {
   .workspace {
     grid-template-columns: 1fr;
   }
-
   .card-aside {
     order: -1;
   }
@@ -483,34 +566,24 @@ input {
     padding-top: 48px;
     padding-bottom: 48px;
   }
-
   .hero h1 {
-    font-size: 2.15rem;
+    font-size: 2.1rem;
     letter-spacing: -0.04em;
   }
-
   .card-main,
   .card-aside {
     padding: 18px;
     border-radius: var(--radius);
   }
-
-  .field-hint {
+  .input-help {
     display: none;
   }
-
   .result-top {
-    align-items: flex-start;
     flex-direction: column;
     gap: 8px;
   }
-
   .result-toolbar {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .action-btn-solid {
-    grid-column: 1 / -1;
+    grid-template-columns: 1fr;
   }
 }

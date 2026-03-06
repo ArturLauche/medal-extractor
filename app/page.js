@@ -50,7 +50,16 @@ function IconCheck() {
   );
 }
 
-/* ─── Page ──────────────────────────────────────── */
+/* ─── Data ─────────────────────────────────────── */
+
+const STEPS = [
+  'Copy a clip link from Medal.tv',
+  'Paste it into the field above',
+  <span key="s3">Click <strong>Extract video</strong></span>,
+  'Preview, copy, or download',
+];
+
+/* ─── Page ─────────────────────────────────────── */
 
 export default function Home() {
   const [url, setUrl] = useState('');
@@ -108,11 +117,14 @@ export default function Home() {
 
       {/* Hero */}
       <header className="hero">
-        <span className="eyebrow">Medal.tv · Direct link extractor</span>
+        <span className="eyebrow">
+          <span className="status-dot" />
+          Medal.tv · Direct link extractor
+        </span>
         <h1>Get the direct link<br />to any clip.</h1>
         <p className="lead">
-          Paste a Medal.tv clip URL to get a CDN-direct MP4 link — up to 1080p.
-          No account, no browser extension, no fuss.
+          Paste a Medal.tv clip URL to get a CDN-direct MP4 — up to 1080p.
+          No account, no extension, no fuss.
         </p>
       </header>
 
@@ -123,15 +135,10 @@ export default function Home() {
         <div className="card card-main">
           <form className="form" onSubmit={handleSubmit}>
 
-            <div className="field-header">
-              <label htmlFor="clip-url">Clip URL</label>
-              <span className="field-hint">medal.tv/games/[game]/clips/[id]</span>
-            </div>
+            <label htmlFor="clip-url" className="field-label">Clip URL</label>
 
             <div className="input-shell">
-              <span className="field-icon">
-                <IconLink />
-              </span>
+              <span className="field-icon"><IconLink /></span>
               <input
                 id="clip-url"
                 type="url"
@@ -148,11 +155,22 @@ export default function Home() {
               </button>
             </div>
 
+            <p className="input-help">medal.tv/games/[game]/clips/[clip-id]</p>
+
             <button type="submit" disabled={loading} className="submit-btn">
               {loading
                 ? <><span className="spinner" />Extracting&hellip;</>
                 : 'Extract video'}
             </button>
+
+            <p className="trust-row">
+              <span>Free</span>
+              <span className="trust-sep">·</span>
+              <span>Up to 1080p</span>
+              <span className="trust-sep">·</span>
+              <span>No account required</span>
+            </p>
+
           </form>
 
           {error && (
@@ -179,12 +197,10 @@ export default function Home() {
                   {copied ? 'Copied' : 'Copy link'}
                 </button>
                 <a href={result} target="_blank" rel="noreferrer" className="action-btn">
-                  <IconExternal />
-                  Open file
+                  <IconExternal /> Open file
                 </a>
                 <a href={result} download className="action-btn action-btn-solid">
-                  <IconDownload />
-                  Download
+                  <IconDownload /> Download
                 </a>
               </div>
 
@@ -206,22 +222,23 @@ export default function Home() {
         <aside className="card card-aside">
           <p className="section-label">Supported format</p>
           <h2>URL structure</h2>
-          <pre className="code-block">{`medal.tv/games/[game]
-  /clips/[clip-id]`}</pre>
+          <pre className="code-block">{`medal.tv/games/[game]\n  /clips/[clip-id]`}</pre>
 
           <div className="aside-divider" />
 
           <p className="section-label">How it works</p>
           <ol className="steps-list">
-            <li>Copy a clip link from Medal.tv</li>
-            <li>Paste it into the field</li>
-            <li>Click <strong>Extract video</strong></li>
-            <li>Preview, copy, or download</li>
+            {STEPS.map((step, i) => (
+              <li key={i} className="step-item">
+                <span className="step-num">{i + 1}</span>
+                <span>{step}</span>
+              </li>
+            ))}
           </ol>
 
           <div className="aside-note">
-            If a clip returns &ldquo;not found&rdquo;, check that it&rsquo;s
-            still public on Medal before trying again.
+            If a clip returns “not found”, verify it’s still public
+            on Medal before trying again.
           </div>
         </aside>
 
