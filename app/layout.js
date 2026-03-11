@@ -9,6 +9,9 @@ const inter = Inter({
 export const metadata = {
   title: 'Medal Extractor',
   description: 'Extract direct MP4 links from Medal.tv clips.',
+  icons: {
+    icon: '/icon.svg',
+  },
 };
 
 export const viewport = {

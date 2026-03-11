@@ -62,9 +62,15 @@ Or connect the repo in the Netlify dashboard — it auto-detects Next.js.
 
 ### Cloudflare Pages
 
+Cloudflare has deprecated `@cloudflare/next-on-pages` for modern Next.js apps. Use OpenNext instead:
+
 ```bash
-npm install -D @cloudflare/next-on-pages
-npx @cloudflare/next-on-pages
+pnpm dlx @opennextjs/cloudflare@latest build
 ```
 
-Set the build command to `npx @cloudflare/next-on-pages` and output directory to `.vercel/output/static` in your Cloudflare Pages project settings. The Edge runtime on the API route is already configured.
+In the Cloudflare Pages UI set:
+
+- **Build command:** `pnpm dlx @opennextjs/cloudflare@latest build`
+- **Build output directory:** `.open-next/assets`
+
+Also ensure your project has a static icon in `public/icon.svg` (instead of `app/icon.svg`) so Pages does not treat the icon metadata route as a server route.
