@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 
-export const runtime = 'edge';
 
 // Matches medal.tv/games/.../clips/ID and locale variants like
 // medal.tv/de/games/.../clips/ID — with or without query params.

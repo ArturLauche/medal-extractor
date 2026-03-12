@@ -12,7 +12,7 @@ The API:
 3. Auto-detects the current build hash from `medal.tv` if the path is stale
 4. Returns the highest available quality (1080p → 720p → … → 144p fallback)
 
-The API route uses the **Edge runtime** (`export const runtime = 'edge'`), which means it runs on Cloudflare’s V8 isolates, Netlify Edge Functions, and Vercel Edge — only standard Web APIs (`fetch`, `Response`) are used.
+The API route is runtime-agnostic (no forced `edge` runtime export), which keeps it compatible with OpenNext Cloudflare server bundling while still using standard Web APIs (`fetch`, `Response`).
 
 ## API
 
@@ -75,6 +75,6 @@ In the Cloudflare Pages UI set:
 
 OpenNext also requires `open-next.config.ts` in the project root with Cloudflare-compatible `default.override`/`middleware.override` settings (this repository includes them), otherwise Pages build fails configuration validation.
 
-To avoid interactive OpenNext prompts in CI, this repository also includes a minimal `wrangler.jsonc`.
+To avoid interactive OpenNext prompts in CI and satisfy Cloudflare Pages Wrangler config checks, this repository includes a minimal `wrangler.toml` with `pages_build_output_dir`.
 
 Also ensure your project has a static icon in `public/icon.svg` (instead of `app/icon.svg`) so Pages does not treat the icon metadata route as a server route.
