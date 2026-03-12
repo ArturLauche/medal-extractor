@@ -73,6 +73,8 @@ In the Cloudflare Pages UI set:
 - **Build command:** `pnpm dlx @opennextjs/cloudflare@latest build`
 - **Build output directory:** `.open-next/assets`
 
-OpenNext also requires `open-next.config.ts` in the project root (this repository includes it) so the Pages build does not stop for an interactive prompt.
+OpenNext also requires `open-next.config.ts` in the project root with Cloudflare-compatible `default.override`/`middleware.override` settings (this repository includes them), otherwise Pages build fails configuration validation.
+
+To avoid interactive OpenNext prompts in CI, this repository also includes a minimal `wrangler.jsonc`.
 
 Also ensure your project has a static icon in `public/icon.svg` (instead of `app/icon.svg`) so Pages does not treat the icon metadata route as a server route.
