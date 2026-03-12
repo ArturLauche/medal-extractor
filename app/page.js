@@ -215,7 +215,6 @@ export default function Home() {
 
       <footer className="footer">
         <p>
-          Free and open source.{' '}
           <a
             href="https://github.com/ArturLauworksrg/medal-extractor"
             target="_blank"
