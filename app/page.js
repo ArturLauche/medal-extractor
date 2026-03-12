@@ -48,6 +48,23 @@ function IconCheck() {
   );
 }
 
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Medal Extractor',
+  applicationCategory: 'UtilitiesApplication',
+  operatingSystem: 'Web',
+  description:
+    'Extract direct MP4 links from public Medal.tv clips. Paste a clip URL to preview, copy, or download.',
+  url: 'https://medal-extractor.vercel.app',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+};
+
 const STEPS = [
   'Copy a clip link from Medal.tv',
   'Paste it into the input above',
@@ -112,6 +129,7 @@ export default function Home() {
   }
 
   return (
+    <>
     <div className="page">
       <header className="hero">
         <span className="eyebrow">
@@ -259,5 +277,11 @@ export default function Home() {
         </aside>
       </div>
     </div>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+    </>
   );
 }
