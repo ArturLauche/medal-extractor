@@ -73,6 +73,6 @@ In the Cloudflare Pages UI set:
 - **Build command:** `pnpm dlx @opennextjs/cloudflare@latest build`
 - **Build output directory:** `.open-next/assets`
 
-OpenNext also requires `open-next.config.ts` in the project root (this repository includes it) so the Pages build does not stop for an interactive prompt.
+OpenNext also requires `open-next.config.ts` in the project root with a `default` worker target (this repository includes it) so the Pages build does not fail config validation.
 
 Also ensure your project has a static icon in `public/icon.svg` (instead of `app/icon.svg`) so Pages does not treat the icon metadata route as a server route.
