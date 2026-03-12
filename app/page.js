@@ -213,17 +213,6 @@ export default function Home() {
         </ul>
       </section>
 
-      <footer className="footer">
-        <p>
-          <a
-            href="https://github.com/ArturLauworksrg/medal-extractor"
-            target="_blank"
-            rel="noreferrer"
-          >
-            View on GitHub
-          </a>
-        </p>
-      </footer>
     </main>
   );
 }
