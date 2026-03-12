@@ -26,24 +26,53 @@ async function getVideoUrl(clipId) {
   if (res.status === 404) return null;
   if (!res.ok) throw new Error(`Medal returned ${res.status}`);
 
+  const markers = [
+    '"contentUrl":"',
+    'property="og:video:url" content="',
+    'property="og:video:secure_url" content="',
+  ];
+
+  const extractFromHtml = (html) => {
+    for (const marker of markers) {
+      const match = html.split(marker)[1]?.split('"')[0];
+      if (match && match.startsWith('http')) return match;
+    }
+    return null;
+  };
+
+  // Stream and stop early as soon as we find the video URL.
+  // This avoids downloading/parsing the full document when possible.
+  if (res.body?.getReader) {
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let htmlChunk = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      htmlChunk += decoder.decode(value, { stream: true });
+
+      const streamedMatch = extractFromHtml(htmlChunk);
+      if (streamedMatch) {
+        await reader.cancel();
+        return streamedMatch;
+      }
+
+      // Keep only the tail to cap memory while preserving split markers.
+      if (htmlChunk.length > 256_000) {
+        htmlChunk = htmlChunk.slice(-32_000);
+      }
+    }
+
+    htmlChunk += decoder.decode();
+    const streamedFinalMatch = extractFromHtml(htmlChunk);
+    if (streamedFinalMatch) return streamedFinalMatch;
+  }
+
   const html = await res.text();
-
-  // Primary: contentUrl embedded in Next.js hydration JSON
-  const contentUrlMatch = html.split('"contentUrl":"')[1]?.split('"')[0];
-  if (contentUrlMatch && contentUrlMatch.startsWith('http'))
-    return contentUrlMatch;
-
-  // Fallback 1: og:video:url meta tag
-  const ogVideoMatch = html
-    .split('property="og:video:url" content="')[1]
-    ?.split('"')[0];
-  if (ogVideoMatch && ogVideoMatch.startsWith('http')) return ogVideoMatch;
-
-  // Fallback 2: og:video:secure_url meta tag
-  const ogSecureMatch = html
-    .split('property="og:video:secure_url" content="')[1]
-    ?.split('"')[0];
-  if (ogSecureMatch && ogSecureMatch.startsWith('http')) return ogSecureMatch;
+  const textMatch = extractFromHtml(html);
+  if (textMatch) return textMatch;
 
   return null;
 }
