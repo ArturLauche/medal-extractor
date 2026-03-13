@@ -7,7 +7,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "opennextjs-cloudflare": "pnpm dlx @opennextjs/cloudflare@latest",
+    "preview": "pnpm opennextjs-cloudflare build && pnpm opennextjs-cloudflare preview",
+    "deploy": "pnpm opennextjs-cloudflare build && pnpm opennextjs-cloudflare deploy"
   },
   "dependencies": {
     "next": "^15.2.0",
