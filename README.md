@@ -60,19 +60,18 @@ netlify deploy --prod --dir .next
 
 Or connect the repo in the Netlify dashboard — it auto-detects Next.js.
 
-### Cloudflare Workers / Pages
+### Cloudflare Pages
 
-Cloudflare has deprecated `@cloudflare/next-on-pages` for modern Next.js apps. This repo uses OpenNext for Cloudflare-compatible builds.
-
-Use the provided scripts:
+Cloudflare has deprecated `@cloudflare/next-on-pages` for modern Next.js apps. Use OpenNext instead:
 
 ```bash
-pnpm run deploy
+pnpm dlx @opennextjs/cloudflare@latest build
 ```
 
-That command runs `pnpm opennextjs-cloudflare build && pnpm opennextjs-cloudflare deploy`.
+In the Cloudflare Pages UI set:
 
-If you deploy from Cloudflare's UI/CI with Wrangler, keep `wrangler.jsonc` in the repo so Wrangler skips interactive framework setup and uses the existing OpenNext configuration.
+- **Build command:** `pnpm dlx @opennextjs/cloudflare@latest build`
+- **Build output directory:** `.open-next/assets`
 
 OpenNext also requires `open-next.config.ts` in the project root with Cloudflare-compatible `default.override`/`middleware.override` settings (this repository includes them), otherwise Pages build fails configuration validation.
 
