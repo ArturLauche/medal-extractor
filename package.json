@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "opennextjs-cloudflare": "pnpm dlx @opennextjs/cloudflare@latest",
+    "opennextjs-cloudflare": "opennextjs-cloudflare",
     "preview": "pnpm opennextjs-cloudflare build && pnpm opennextjs-cloudflare preview",
     "deploy": "pnpm opennextjs-cloudflare build && pnpm opennextjs-cloudflare deploy"
   },
@@ -21,6 +21,7 @@
     "node": ">=18.0.0"
   },
   "devDependencies": {
-    "wrangler": "^4.73.0"
+    "@opennextjs/cloudflare": "1.17.1",
+    "wrangler": "4.73.0"
   }
 }
